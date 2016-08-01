@@ -37,6 +37,9 @@ foreach my $v (@i) {
     $v0 =~ s/\s*//g;
     $l = length($v0) / 2;
 
+    next if ($v =~ /^c4/); # dont support vex
+    next if ($v =~ /^c5/); # dont support vex
+
     print("v=`./p0.exe \'$v\'`; if [ \"\$v\" != \"$l\" ]; then\n");
     print("  echo \"Mismatch $i:(\$v!= expect:$l) $line\"\n");
     print("else\n");
