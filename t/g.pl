@@ -1,6 +1,21 @@
 $i = 0;
 @i = ();
 while (<>) {
+    next if ($_ =~ /\(bad\)/);
+    next if ($_ =~ /\.byte/);
+    next if ($_ =~ /data16 nopw/);
+    next if ($_ =~ /data16 data16/);
+    next if ($_ =~ /rex\.[RWXB]+$/);
+    next if ($_ =~ /rex$/);
+    next if ($_ =~ /\s+data16$/);
+    next if ($_ =~ /\s+ds$/);
+    next if ($_ =~ /\s+cs$/);
+    next if ($_ =~ /\s+gs$/);
+    next if ($_ =~ /\s+ss$/);
+    next if ($_ =~ /\s+es$/);
+    next if ($_ =~ /\s+fs$/);
+    next if ($_ =~ /<_end\+/);
+
     if ($_ =~ /^\s*[0-9a-f]+:\t((?:[0-9a-f]{2}[ ])+)$/) {
 	my ($v,$line) = ($1,$_);
 	my $off = scalar(@i);

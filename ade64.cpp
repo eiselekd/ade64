@@ -344,7 +344,7 @@ DWORD ade64_table[256*3] = {
 /* 04 */  C_ERROR,
 /* 05 */  0 /*C_ERROR*/,
 /* 06 */  0,
-/* 07 */  C_ERROR,
+/* 07 */  0 /*C_ERROR*/,
 /* 08 */  0,
 /* 09 */  0,
 /* 0A */  0,
@@ -369,7 +369,7 @@ DWORD ade64_table[256*3] = {
 /* 1D */  C_MODRM /*C_ERROR*/,
 /* 1E */  C_MODRM /*C_ERROR*/,
 /* 1F */  C_MODRM /*C_ERROR*/,
-/* 20 */  C_MODRM /*C_ERROR*/,
+/* 20 */  C_DATA1 /*C_ERROR*/,
 /* 21 */  C_MODRM /*C_ERROR*/,
 /* 22 */  C_MODRM /*C_ERROR*/,
 /* 23 */  C_MODRM /*C_ERROR*/,
@@ -385,10 +385,10 @@ DWORD ade64_table[256*3] = {
 /* 2D */  C_MODRM /*C_ERROR*/,
 /* 2E */  C_MODRM /*C_ERROR*/,
 /* 2F */  C_MODRM /*C_ERROR*/,
-/* 30 */  C_ERROR,
+/* 30 */  0 /*C_ERROR*/,
 /* 31 */  0 /*C_ERROR*/,
-/* 32 */  C_ERROR,
-/* 33 */  C_ERROR,
+/* 32 */  0 /*C_ERROR*/,
+/* 33 */  0 /*C_ERROR*/,
 /* 34 */  C_ERROR,
 /* 35 */  C_ERROR,
 /* 36 */  C_ERROR,
@@ -450,7 +450,7 @@ DWORD ade64_table[256*3] = {
 /* 6E */  C_MODRM /*C_ERROR*/,
 /* 6F */  C_MODRM /*C_ERROR*/,
 /* 70 */  C_MODRM+C_DATA1 /*C_ERROR*/,
-/* 71 */  C_ERROR,
+/* 71 */  C_MODRM+C_DATA1 /*C_ERROR*/,
 /* 72 */  C_ERROR,
 /* 73 */  C_MODRM+C_DATA1 /*C_ERROR*/,
 /* 74 */  C_MODRM /*C_ERROR*/,
@@ -868,7 +868,7 @@ int ade64_disasm(IN BYTE* opcode0, IN OUT disasm64_struct* diza)
   diza->disasm_defdata = 4;                  // and fill structure before call
   diza->disasm_defaddr = 4;                  // -- to allow 16/32-bit disasm
 
-  if (*(WORD*)opcode == 0x0000) return 0;
+  /*if (*(WORD*)opcode == 0x0000) return 0;*/
   if (*(WORD*)opcode == 0xFFFF) return 0;
 
   DWORD flag = 0;
@@ -888,7 +888,7 @@ repeat_prefix:
 
     if (t & C_67)
     {
-      diza->disasm_defaddr ^= 2^4;
+      //diza->disasm_defaddr ^= 2^4;
     }
     else
     if (t & C_66)
@@ -1025,7 +1025,7 @@ repeat_prefix:
   DWORD a =  flag & (C_ADDR1 | C_ADDR2 | C_ADDR4 | C_ADDR8);
   DWORD d = (flag & (C_DATA1 | C_DATA2 | C_DATA4 | C_DATA8)) >> 12;
 
-  if (flag & C_ADDR67) a += diza->disasm_defaddr;
+  if (flag & C_ADDR67) a += diza->disasm_defaddr*2;
   if (flag & C_DATA66) {
     d += ((flag & C_DATAQ) && (diza->disasm_rex & REX_W)) ? 8 :  diza->disasm_defdata;
   }
